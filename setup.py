@@ -60,7 +60,7 @@ setup(
                       'httplib2',
                       'paramiko >= 1.15.1',
                       'pexpect',
-                      'requests >= 2.3.0',
+                      'requests !=2.9.0, >= 2.8.1', # python-openstackclient excludes 2.9.0
                       'raven',
                       'web.py',
                       'docopt',
