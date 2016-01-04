@@ -443,6 +443,8 @@ function verify_openstack() {
         provider=ovh
     elif echo $OS_AUTH_URL | grep -qq entercloudsuite.com ; then
         provider=entercloudsuite
+    elif echo $OS_AUTH_URL | grep -qq xws.x-ion.de ; then
+        provider=xion
     else
         provider=standardopenstack
     fi
@@ -563,6 +565,12 @@ function main() {
     if test -z "$default_subnet" ; then
         default_subnet=$(nova tenant-network-list | grep / | cut -f6 -d' ' | head -1)
     fi
+    case $provider in
+	xion)
+	    # Hack(JR): Hard-code these for now
+	    eval local network=xion-default
+	    default_subnet=10.42.0.0/16
+    esac
     : ${subnet:=$default_subnet}
 
     case $provider in

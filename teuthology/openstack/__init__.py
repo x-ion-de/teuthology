@@ -206,6 +206,7 @@ class OpenStack(object):
         if 'OS_AUTH_URL' not in os.environ:
             raise Exception('no OS_AUTH_URL environment variable')
         providers = (('cloud.ovh.net', 'ovh'),
+                     ('xws.x-ion.de', 'xion'),
                      ('entercloudsuite.com', 'entercloudsuite'),
                      ('rackspacecloud.com', 'rackspace'),
                      ('dream.io', 'dreamhost'))
@@ -265,7 +266,7 @@ class OpenStack(object):
         """
         misc.sh("wget -c -O " + name + ".qcow2 " + self.image2url[name])
         self.set_provider()
-        if self.provider == 'dreamhost':
+        if self.provider in ['dreamhost', 'xion']:
             image = name + ".raw"
             disk_format = 'raw'
             misc.sh("qemu-img convert " + name + ".qcow2 " + image)
@@ -624,6 +625,8 @@ ssh access           : ssh {identity}{username}@{ip} # logs in /usr/share/nginx/
         """
         if self.provider == 'entercloudsuite':
             return "--nic net-id=default"
+        elif self.provider == 'xion':
+            return "--nic net-id=xion-default --nic net-id=shared"
         else:
             return ""
 
